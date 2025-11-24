@@ -44,5 +44,29 @@ def preprocess_products(products_df):
     Pré-processa o dataset de produtos:
     - Preenche valores nulos na coluna de categoria com 'unknown'
     """
-    products_df["product_category_name"].fillna("unknown", inplace=True)
+    products_df["product_category_name"] = products_df["product_category_name"].fillna("unknown")
     return products_df
+
+def preprocess_data(data):
+    """
+    Função principal de pré-processamento que aplica transformações
+    nos datasets carregados e retorna um DataFrame consolidado.
+    """
+    # Pré-processar pedidos
+    orders = preprocess_orders(data["orders"])
+    
+    # Pré-processar produtos
+    products = preprocess_products(data["products"])
+    
+    # Juntar com itens e clientes
+    items = data["order_items"]
+    customers = data["customers"]
+
+    df = orders.merge(items, on="order_id")
+    df = df.merge(products, on="product_id")
+    df = df.merge(customers, on="customer_id")
+
+    # Criar coluna ano/mês
+    df["year_month"] = df["order_purchase_timestamp"].dt.to_period("M").astype(str)
+
+    return df
