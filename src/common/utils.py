@@ -5,6 +5,25 @@ Inclui gráficos de tendência por categoria, que podem ser usados para análise
 """
 
 import matplotlib.pyplot as plt
+import os
+
+
+def ensure_dir(path: str):
+    """
+    Cria o diretório se ele não existir.
+    """
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def save_current_fig(path: str, filename: str, dpi: int = 120):
+    """
+    Salva o gráfico atual (plt) em um arquivo PNG dentro do diretório especificado.
+    """
+    ensure_dir(path)
+    full_path = os.path.join(path, filename)
+    plt.savefig(full_path, dpi=dpi, bbox_inches="tight")
+    print(f"🖼️ Gráfico salvo em {full_path}")
+
 
 def plot_category_trends(df, category_col="product_category_name", date_col="order_purchase_timestamp"):
     """
