@@ -5,56 +5,31 @@ Cada função retorna um DataFrame do Pandas correspondente a uma tabela especí
 Essas funções podem ser utilizadas por todos os membros do projeto para garantir consistência no carregamento dos dados.
 """
 
-import pandas as pd
 import os
+import pandas as pd
 
-# Define o caminho base para os arquivos de dados brutos
-DATA_PATH = os.path.join(os.path.dirname(__file__), "../../datasets/raw")
+DATASETS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "datasets")
 
-def load_customers():
-    """Carrega o dataset de clientes"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_customers_dataset.csv"))
+def _read_csv_safe(path: str) -> pd.DataFrame:
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Arquivo não encontrado: {path}")
+    return pd.read_csv(path, encoding="utf-8")
 
-def load_orders():
-    """Carrega o dataset de pedidos"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_orders_dataset.csv"))
-
-def load_order_items():
-    """Carrega o dataset de itens dos pedidos"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_order_items_dataset.csv"))
-
-def load_products():
-    """Carrega o dataset de produtos"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_products_dataset.csv"))
-
-def load_order_payments():
-    """Carrega o dataset de pagamentos dos pedidos"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_order_payments_dataset.csv"))
-
-def load_order_reviews():
-    """Carrega o dataset de avaliações dos pedidos"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_order_reviews_dataset.csv"))
-
-def load_sellers():
-    """Carrega o dataset de vendedores"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_sellers_dataset.csv"))
-
-def load_geolocation():
-    """Carrega o dataset de geolocalização"""
-    return pd.read_csv(os.path.join(DATA_PATH, "olist_geolocation_dataset.csv"))
-
-def load_all_data():
+def load_all_data() -> dict:
     """
-    Carrega todos os datasets e retorna em um dicionário.
-    Útil para quem quiser ter acesso a todas as tabelas de uma vez.
+    Carrega os principais datasets da Olist.
+    Espera arquivos com nomes padrão dentro de datasets/.
     """
-    return {
-        "customers": load_customers(),
-        "orders": load_orders(),
-        "order_items": load_order_items(),
-        "products": load_products(),
-        "payments": load_order_payments(),
-        "reviews": load_order_reviews(),
-        "sellers": load_sellers(),
-        "geolocation": load_geolocation(),
+    data = {
+        "orders": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_orders_dataset.csv")),
+        "order_items": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_order_items_dataset.csv")),
+        "customers": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_customers_dataset.csv")),
+        "products": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_products_dataset.csv")),
+        "sellers": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_sellers_dataset.csv")),
+        "geolocation": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_geolocation_dataset.csv")),
+        "product_translation": _read_csv_safe(os.path.join(DATASETS_DIR, "product_category_name_translation.csv")),
+        # opcional: avaliações e pagamentos, se quiser usar no futuro
+        # "reviews": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_order_reviews_dataset.csv")),
+        # "payments": _read_csv_safe(os.path.join(DATASETS_DIR, "olist_order_payments_dataset.csv")),
     }
+    return data
