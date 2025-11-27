@@ -86,5 +86,19 @@ plt.title('4. Gargalos Logísticos: Tempo de Entrega por Estado de Origem')
 plt.ylabel('Dias para Entrega (Mediana e Variação)')
 plt.xlabel('Estado de Origem do Seller')
 
-plt.tight_layout(pad=3.0, w_pad=2.0, h_pad=3.0)
-plt.show()
+# Em execuções automatizadas (CI / headless) salvamos a figura em vez de abrir janelas
+output_dir = os.path.join(base_path, 'outputs', 'insights')
+os.makedirs(output_dir, exist_ok=True)
+output_file = os.path.join(output_dir, 'vendedores_summary.png')
+try:
+	plt.tight_layout(pad=3.0, w_pad=2.0, h_pad=3.0)
+	fig.savefig(output_file, bbox_inches='tight', dpi=150)
+	print(f"Gráfico salvo em: {output_file}")
+except Exception as e:
+	print(f"Erro ao salvar figura: {e}")
+
+# Tenta mostrar interativamente se houver display (não falha em headless)
+try:
+	plt.show()
+except Exception:
+	plt.close(fig)
