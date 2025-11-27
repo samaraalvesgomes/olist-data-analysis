@@ -12,4 +12,4 @@ __pycache__/
 # Ignorar arquivos de sistema
 .DS_Store
 Thumbs.db
-
+__init__
