@@ -1,4 +1,6 @@
+kagglehub
 pandas
+
 numpy
 matplotlib
 seaborn
@@ -7,3 +9,4 @@ openpyxl
 requests
 workalendar
 scikit-learn
+
