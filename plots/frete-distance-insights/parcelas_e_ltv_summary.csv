@@ -1,0 +1,5 @@
+install_segment,clientes,avg_ltv,median_ltv,avg_orders
+parcelas_altas_7_plus,11998,336.01486747791296,206.72,1.0
+parcelas_baixas_2_3,22941,136.3351902706944,111.8,1.0
+parcelas_medias_4_6,16200,185.13103333333333,129.39499999999998,1.0
+sem_parcelas,48301,121.12745905881867,79.53,1.0
